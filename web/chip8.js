@@ -1,6 +1,6 @@
 const hex = (value, length = 2) => {
   const padded = "0000" + value.toString(16).toUpperCase();
-  return padded.substr(padded.length - length);
+  return padded.substring(padded.length - length);
 };
 
 const inRange = (value, lower, upper) => value >= lower && value <= upper;
@@ -29,7 +29,7 @@ const ROMS = [
   "UFO",
   "VBRIX",
   "VERS",
-  "WIPEOFF"
+  "WIPEOFF",
 ];
 
 const translateKeys = {
@@ -48,7 +48,7 @@ const translateKeys = {
   90: 0xa, // Z
   88: 0x0, // X
   67: 0xb, // C
-  86: 0xf // V
+  86: 0xf, // V
 };
 
 const dissassemble = (program, addr) => {
@@ -117,17 +117,17 @@ const run = async () => {
   const programMemory = new Uint8Array(
     exports.memory.buffer,
     exports.get_memory(),
-    4096
+    4096,
   );
   const displayMemory = new Uint8Array(
     exports.memory.buffer,
     exports.get_display(),
-    2048
+    2048,
   );
   const vMemory = new Uint8Array(
     exports.memory.buffer,
     exports.get_register_v(),
-    16
+    16,
   );
 
   // initialise the canvas
@@ -165,10 +165,12 @@ const run = async () => {
       const clazz = `addr_${address}`;
       const haddress = "0x" + hex(address, 4);
       $(".memory").append(
-        `<div class='${clazz}'>${haddress} - ${dissassemble(
-          programMemory,
-          address
-        )}</div>`
+        `<div class='${clazz}'>${haddress} - ${
+          dissassemble(
+            programMemory,
+            address,
+          )
+        }</div>`,
       );
       address += 2;
     }
@@ -183,7 +185,7 @@ const run = async () => {
       container.scrollTop(
         currentAddress.offset().top -
           container.offset().top +
-          container.scrollTop()
+          container.scrollTop(),
       );
     }
   };
@@ -194,10 +196,10 @@ const run = async () => {
     updateProgramCounter();
   };
 
-  const loadRom = rom =>
+  const loadRom = (rom) =>
     fetch(`roms/${rom}`)
-      .then(i => i.arrayBuffer())
-      .then(buffer => {
+      .then((i) => i.arrayBuffer())
+      .then((buffer) => {
         // write the ROM to memory
         const rom = new DataView(buffer, 0, buffer.byteLength);
         exports.reset();
@@ -208,11 +210,11 @@ const run = async () => {
         dumpMemory();
       });
 
-  ROMS.forEach(rom => {
+  ROMS.forEach((rom) => {
     $("#roms").append(`<option value='${rom}'>${rom}</option>`);
   });
 
-  document.getElementById("roms").addEventListener("change", e => {
+  document.getElementById("roms").addEventListener("change", (e) => {
     loadRom(e.target.value);
   });
 
@@ -245,11 +247,11 @@ const run = async () => {
     }
   });
 
-  document.addEventListener("keydown", event => {
+  document.addEventListener("keydown", (event) => {
     exports.key_down(translateKeys[event.keyCode]);
   });
 
-  document.addEventListener("keyup", event => {
+  document.addEventListener("keyup", (event) => {
     exports.key_up(translateKeys[event.keyCode]);
   });
 

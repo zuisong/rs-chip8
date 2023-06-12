@@ -1,5 +1,5 @@
 pub mod cpu;
-pub mod wasm;
 pub mod display;
-pub mod rand;
 pub mod keypad;
+pub mod rand;
+pub mod wasm;

@@ -1,3 +1,4 @@
+use crate::{cpu, display, keypad, rand};
 use cpu::Cpu;
 use display::Display;
 use keypad::Keypad;
@@ -10,19 +11,15 @@ static mut CPU: Cpu = Cpu {
     dt: 0,
     memory: [0; 4096],
     v: [0; 16],
-    display: Display {
-        memory: [0; 2048]
-    },
-    keypad: Keypad {
-        keys: [false; 16]
-    },
+    display: Display { memory: [0; 2048] },
+    keypad: Keypad { keys: [false; 16] },
     stack: [0; 16],
     sp: 0,
     rand: ComplementaryMultiplyWithCarryGen {
         q: [0; CMWC_CYCLE],
         c: 0,
-        i: 0
-    }
+        i: 0,
+    },
 };
 
 #[no_mangle]
@@ -34,16 +31,12 @@ pub fn reset() {
 
 #[no_mangle]
 pub fn get_memory() -> &'static [u8; 4096] {
-    unsafe {
-        &CPU.memory
-    }
+    unsafe { &CPU.memory }
 }
 
 #[no_mangle]
 pub fn get_display() -> &'static [u8; 2048] {
-    unsafe {
-        &CPU.display.memory
-    }
+    unsafe { &CPU.display.memory }
 }
 
 #[no_mangle]
@@ -62,23 +55,17 @@ pub fn key_up(i: u8) {
 
 #[no_mangle]
 pub fn get_register_v() -> &'static [u8; 16] {
-    unsafe {
-        &CPU.v
-    }
+    unsafe { &CPU.v }
 }
 
 #[no_mangle]
 pub fn get_register_i() -> u16 {
-    unsafe {
-        CPU.i
-    }
+    unsafe { CPU.i }
 }
 
 #[no_mangle]
 pub fn get_register_pc() -> u16 {
-    unsafe {
-        CPU.pc
-    }
+    unsafe { CPU.pc }
 }
 
 #[no_mangle]
